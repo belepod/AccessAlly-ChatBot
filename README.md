@@ -5,7 +5,7 @@ AccessAlly AI is a web-based application designed to provide an accessible commu
 The project aims to make digital communication easier by providing multiple input and output methods, along with features tailored for accessibility and user convenience.
 
 <!-- Add a screenshot or GIF demo here -->
-<!-- ![AccessAlly AI Demo](link/to/your/screenshot.png) -->
+![AccessAlly AI Demo](https://github.com/belepod/AccessAlly-ChatBot/blob/main/image_2025-04-11_211606587.png)
 
 ## Key Features
 
@@ -62,8 +62,8 @@ Before you begin, ensure you have the following installed:
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/belepod/AccessAlly-AI.git
-    cd AccessAlly-AI
+    git clone https://github.com/belepod/AccessAlly-ChatBot.git
+    cd AccessAlly-ChatBot
     ```
 
 2.  **Create and Activate a Virtual Environment:**
