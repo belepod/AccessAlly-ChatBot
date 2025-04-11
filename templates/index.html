@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessAlly AI - Accessible Chat Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body data-theme="dark">
+
+    <div class="app-wrapper">
+
+        <button id="sos-button" class="sos-button" aria-label="Emergency SOS - Opens Simulated Emergency Call Screen">
+            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> SOS
+        </button>
+
+        <div class="app-container">
+            <header class="app-header">
+                <h1>Welcome to AccessAlly AI</h1>
+                <div class="user-selection">
+                    <label for="username-input">Username:</label>
+                    <input type="text" id="username-input" placeholder="Enter username..." aria-label="Enter your username" autocomplete="off">
+                    <button id="set-user-button" aria-label="Load history and notes for username">
+                        <i class="fas fa-user-check" aria-hidden="true"></i> Set User
+                    </button>
+                    <span id="current-user-display" class="current-user-display" aria-live="polite"></span>
+                </div>
+                 <div class="controls-row">
+                    <div class="accessibility-controls">
+                        <span id="font-size-label">Font:</span>
+                        <button id="decrease-font" aria-labelledby="font-size-label" aria-label="Decrease font size"><i class="fas fa-minus" aria-hidden="true"></i></button>
+                        <button id="increase-font" aria-labelledby="font-size-label" aria-label="Increase font size"><i class="fas fa-plus" aria-hidden="true"></i></button>
+                        <label for="theme-selector">Theme:</label>
+                        <select id="theme-selector" aria-label="Select color theme">
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+                    <div class="action-controls-header">
+                        <button id="toggle-notepad-button" aria-label="Toggle notepad visibility" aria-pressed="false">
+                            <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
+                        </button>
+                        <button id="export-button" aria-label="Export chat history as text file" disabled>
+                            <i class="fas fa-download" aria-hidden="true"></i> Export
+                        </button>
+                    </div>
+                 </div>
+                 <p class="warning" role="status">Note: History & Notes saved per username locally (Demo only).</p>
+            </header>
+
+            <main class="chat-container">
+                <div id="chat-box" role="log" aria-live="polite" aria-relevant="additions text" aria-atomic="false">
+                </div>
+
+                <div id="distress-prompt" class="distress-prompt" role="alert" style="display: none;">
+                    <p>It sounds like you might need assistance. If this is an emergency, please use the SOS button or call your local emergency number.</p>
+                    <button id="dismiss-distress-prompt" aria-label="Dismiss distress warning">Dismiss</button>
+                </div>
+
+                <div class="tts-controls" style="display: none;">
+                     <span id="tts-label">Speech:</span>
+                    <button id="pause-tts" aria-labelledby="tts-label" aria-label="Pause speech"><i class="fas fa-pause" aria-hidden="true"></i> Pause</button>
+                    <button id="resume-tts" aria-labelledby="tts-label" aria-label="Resume speech" disabled><i class="fas fa-play" aria-hidden="true"></i> Resume</button>
+                </div>
+
+                <div class="quick-phrases" aria-labelledby="quick-phrase-label">
+                    <span id="quick-phrase-label">Quick Phrases:</span>
+                    <button class="quick-phrase-btn" data-phrase="Hello">Hello</button>
+                    <button class="quick-phrase-btn" data-phrase="Thank you">Thank you</button>
+                    <button class="quick-phrase-btn" data-phrase="How are you?">How are you?</button>
+                    <button class="quick-phrase-btn" data-phrase="Please explain that again.">Explain Again</button>
+                    <button class="quick-phrase-btn" data-phrase="I need help.">Need Help</button>
+                    <button class="quick-phrase-btn" data-phrase="I don't feel well.">Not Well</button>
+                    <button class="quick-phrase-btn" data-phrase="Can you summarize this?">Summarize?</button>
+                    <button class="quick-phrase-btn" data-phrase="Okay">Okay</button>
+                </div>
+
+                <div class="input-area">
+                    <label for="user-input" class="sr-only">User input message area</label>
+                    <textarea id="user-input" rows="3" placeholder="Please set username..." aria-label="User input message area" disabled></textarea>
+                    <button id="send-button" aria-label="Send text message" title="Send message (Enter)" disabled>
+                        <i class="fas fa-paper-plane" aria-hidden="true"></i> Send
+                    </button>
+                    <button id="record-button" aria-label="Record audio message" title="Record voice message" disabled>
+                        <i class="fas fa-microphone" aria-hidden="true"></i> Record
+                    </button>
+                </div>
+
+                 <div class="action-buttons">
+                    <button id="summarize-short-button" aria-label="Summarize conversation briefly" title="Get short summary" disabled>
+                        <i class="fas fa-compress-alt" aria-hidden="true"></i> Short Sum
+                    </button>
+                    <button id="summarize-long-button" aria-label="Summarize conversation in detail" title="Get detailed summary" disabled>
+                        <i class="fas fa-expand-alt" aria-hidden="true"></i> Long Sum
+                    </button>
+                    <button id="clear-button" aria-label="Clear chat history and notes" title="Clear all data for user" disabled>
+                        <i class="fas fa-trash" aria-hidden="true"></i> Clear All
+                    </button>
+                </div>
+
+                <p id="status" class="status" aria-live="assertive"></p>
+            </main>
+        </div>
+
+        <aside id="notepad-panel" class="notepad-panel" aria-labelledby="notepad-heading" style="display: none;">
+            <h2 id="notepad-heading" class="panel-heading">My Notes</h2>
+            <button id="copy-last-response-button" aria-label="Copy last bot response to notepad" title="Append last response from bot" disabled>
+                <i class="fas fa-paste" aria-hidden="true"></i> Copy Last Bot Msg
+            </button>
+            <label for="notepad-textarea" class="sr-only">Notepad text area</label>
+            <textarea id="notepad-textarea" aria-label="Notepad text area" placeholder="Type your notes here... Notes save automatically."></textarea>
+             <p class="note-save-info" role="status">Notes saved automatically.</p>
+        </aside>
+
+    </div>
+
+
+    <div id="sos-overlay" class="sos-overlay" role="alertdialog" aria-labelledby="sos-heading" aria-describedby="sos-description" aria-modal="true" style="display: none;">
+        <div class="sos-content">
+            <h2 id="sos-heading"><i class="fas fa-broadcast-tower" aria-hidden="true"></i> SIMULATING EMERGENCY CALL</h2>
+            <p id="sos-description">This is an Emergency Call. Calling Emergency Services 100
+            <br><strong>The Emergency Call will be made soon</strong></p>
+            <button id="close-sos-overlay" aria-label="Close SOS notification screen">Close Notification</button>
+        </div>
+    </div>
+
+    <audio id="audio-player" aria-label="Audio player for text-to-speech"></audio>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
